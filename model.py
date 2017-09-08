@@ -11,7 +11,7 @@ import cv2
 
 
 lines = []
-with open('../data/driving_log.csv') as csvfile:
+with open('data/driving_log.csv') as csvfile:
     reader = csv.reader(csvfile)
     for line in reader:
         lines.append(line)
@@ -21,20 +21,26 @@ measurements = []
 for line in lines:
     source_path = line[0]
     filename = source_path.split('/')[-1]
-    current_path = '../data/IMG' + filename
+    current_path = 'data/IMG/' + filename
     image = cv2.imread(current_path)
     images.append(image)
     measurement = float(line[3])
     measurements.append(measurement)
 
+print(current_path)
+print(np.shape(image))
 X_train = np.array(images)
+print(np.shape(X_train))
 y_train = np.array(measurements)
+print(np.shape(y_train))
 
 from keras.models import Sequential
+#from keras import layers
 from keras.layers import Flatten, Dense
-from keras.layers import Convolution2D,pooling
+from keras.layers import Convolution2D, MaxPooling2D
+from keras.layers import Lambda
 
-model = Sequentail()
+model = Sequential()
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=(160,320,3)))
 model.add(Convolution2D(6,5,5,activation="relu"))
 model.add(MaxPooling2D())
@@ -47,5 +53,4 @@ model.add(Dense(1))
 
 model.compile(loss='mse',optimizer='adam')
 model.fit(X_train,y_train,validation_split=0.2,shuffle=True,nb_epoch=10)
-
 model.save('model.h5')
