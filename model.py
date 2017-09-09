@@ -44,10 +44,14 @@ def generator(samples, batch_size):
                         current_path = 'data/IMG/' + filename
                         image = cv2.imread(current_path)
                         images.append(image)
+                        images.append(cv2.flip(image,1))
                     center_angle = float(batch_sample[3])
                     angles.append(center_angle)
+                    angles.append(center_angle*-1.0)
                     angles.append(center_angle + correction)
+                    angles.append((center_angle + correction)*-1.0)
                     angles.append(center_angle - correction)
+                    angles.append((center_angle - correction)*-1.0)
 
             # trim image to only see section with road
             X_train = np.array(images)
@@ -69,16 +73,15 @@ model.add(Convolution2D(64,3,3,activation="relu"))
 model.add(Convolution2D(64,3,3,activation="relu"))
 model.add(Flatten())
 model.add(Dense(100))
-model.add(Dropout(0.7))
+model.add(Dropout(0.5))
 model.add(Dense(50))
-model.add(Dropout(0.7))
+model.add(Dropout(0.5))
 model.add(Dense(10))
 model.add(Dense(1))
 """
 Train model
 """
 model.compile(loss='mse',optimizer='adam')
-print(len(train_samples))
-model.fit_generator(train_generator, samples_per_epoch=len(train_samples), validation_data=validation_generator, nb_val_samples=len(validation_samples), nb_epoch=10)
-#model.fit(X_train,y_train,validation_split=0.2,shuffle=True,nb_epoch=10)
+model.fit_generator(train_generator, samples_per_epoch=len(train_samples)*2, validation_data=validation_generator, nb_val_samples=len(validation_samples)*2, nb_epoch=10)
+#model.fit(X_train,y_train,validation_split=0.2,shuffle=True,nb_epoch=6)
 model.save('model.h5')
