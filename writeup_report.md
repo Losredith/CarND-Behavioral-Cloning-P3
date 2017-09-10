@@ -84,7 +84,21 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 ####2. Final Model Architecture
 
-The final model architecture (model.py lines 66-80) consisted of a convolution neural network with the following layers and layer sizes. 
+The final model architecture (model.py lines 66-80) consisted of a convolution neural network with the following layers and layer sizes:  
+InputLayer: 320x65@3  
+Convolution Layer: kerel:5x5 pooling:2,2 200x66@3  
+Convolution Layer: kerel:5x5 pooling:2,2 98x31@24  
+Convolution Layer: kerel:5x5 pooling:2,2 47x14@36  
+Convolution Layer: kerel:3x3 22x5@48  
+Convolution Layer: kerel:3x3 20x3@64  
+Flatten 18x1@64  
+Fully-connected layer 1164  
+Dropout layer 0.5  
+Fully-connected layer 100  
+Dropout layer 0.5  
+Fully-connected layer 50  
+Fully-connected layer 10  
+OutputLayer: 1  
 
 ![Final Architecture](file:///C:/Users/Instrumentation/Documents/GitHub/CarND-Behavioral-Cloning-P3/cnn.png)
 
@@ -99,6 +113,9 @@ To capture good driving behavior, I first recorded two laps on track one using c
 I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to how to steering back from the edge of the lane. These images show what a recovery looks like:
 
 ![Recovering Driving](file:///C:/Users/Instrumentation/Documents/GitHub/CarND-Behavioral-Cloning-P3/examples/center_2017_09_09_19_40_35_727.jpg)
+![图片描述](file:///C:/Users/Instrumentation/Documents/GitHub/CarND-Behavioral-Cloning-P3/examples/center_2017_09_09_19_40_38_167.jpg)
+
+I aslo record one counter-clockwise direciton lap.
 
 
 Then I repeated this process on track two in order to get more data points.
